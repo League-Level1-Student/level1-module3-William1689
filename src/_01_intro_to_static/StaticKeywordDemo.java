@@ -67,6 +67,7 @@ public class StaticKeywordDemo {
         addCircles();
     }
     
+   
     void addCircles() {
         
         Circle circle1 = new Circle(20, Color.BLUE);
