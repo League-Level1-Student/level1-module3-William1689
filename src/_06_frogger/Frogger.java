@@ -7,15 +7,24 @@ import processing.core.PApplet;
 public class Frogger extends PApplet {
 	static final int WIDTH = 800;
 	static final int HEIGHT = 600;
-	
+	int dashes = 3;
 	int x = 400;
 	int y = 600;
+	int level = 1;
+	int deaths = 0;
+	
 	Car car1;
 	Car car2;
 	Car car3;
 	Car car4;
 	Car car5;
 	Car car6;
+	Car car7;
+	PoliceCar police1;
+	boolean movingUp = false;
+	boolean movingDown = false;
+	boolean movingRight = false;
+	boolean movingLeft = false;
 
 
 	Random ran = new Random();
@@ -31,28 +40,64 @@ public class Frogger extends PApplet {
 
 
 	public void keyPressed() {
-		if(key == CODED){
+	
 			if(keyCode == UP&& y>15)
 			{
 				//Frog Y position goes up
-				y += -20;
+				//y += -20;
+				movingUp = true;
 			}
 			else if(keyCode == DOWN&& y<575)
 			{
 				//Frog Y position goes down 
-				y+= 20;
+				//y+= 20;
+				movingDown = true;
 			}
 			else if(keyCode == RIGHT&&x<775)
 			{
 				//Frog X position goes right
-				x += 20;
+				//x += 20;
+				movingRight = true;
 			}
 			else if(keyCode == LEFT&&x>15)
 			{
 				//Frog X position goes left
-				x+= -20;
+				//x+= -20;
+				movingLeft = true;
+			} 
+			
+
+
+	}
+	public void keyReleased() {
+
+			if(keyCode == UP)
+			{
+				
+				//Frog Y position goes up
+				//y += -20;
+				movingUp = false;
 			}
-		}
+			else if(keyCode == DOWN)
+			{
+				//Frog Y position goes down 
+				//y+= 20;
+				movingDown = false;
+			}
+			else if(keyCode == RIGHT)
+			{
+				//Frog X position goes right
+				//x += 20;
+				movingRight = false;
+			}
+			else if(keyCode == LEFT)
+			{
+				//Frog X position goes left
+				//x+= -20;
+				movingLeft = false;
+			}
+		
+
 	}
 	@Override
 	public void setup() {
@@ -62,6 +107,8 @@ public class Frogger extends PApplet {
 		car4 = new Car(400, 410, 80, 6);
 		car5 = new Car(400,30, 80, 11);
 		car6 = new Car(400,300,80,15);
+		car7 = new Car(400,400, 80, 8);
+		
 
 
 
@@ -71,7 +118,16 @@ public class Frogger extends PApplet {
 	@Override
 	public void draw() {
 		background(0,0,0);
-		
+		if(y <= 30 ) {
+			level++;
+			x= 400;
+			y= 600;
+			dashes++;
+		}
+		fill(255,255,255);
+		text("Deaths: "+ deaths,0,30);
+		text("Level: "+level,0, 20);
+		 
 		fill(0,255,0);
 		ellipse(x,y,30,30);
 		car1.display();
@@ -86,11 +142,31 @@ public class Frogger extends PApplet {
 		car5.moveLeft();
 		car6.display();
 		car6.moveRight();
-		
+		car7.display();
+		car7.moveLeft();
+
+
+		if(movingUp) {
+			y-=5;
+		}
+		if(movingDown) {
+			y+=5;
+		}
+		if(movingRight) {
+			x+=5;
+		}
+		if(movingLeft) {
+			x-=5;
+		}
+
+
+
+
 		if(intersects(car1)||intersects(car2)||intersects(car3)||intersects(car4)||intersects(car5)||intersects(car6)){
 			x=400;
 			y=600;
-			
+			deaths++;
+
 		}
 
 	}
@@ -122,12 +198,11 @@ public class Frogger extends PApplet {
 			rect(x,y,size,50);
 		}
 	}
-	class DrunkDriver extends Car{
-		int drunkenness;
+	
 
 		public DrunkDriver(int x,int y, int size, int speed, int drunkenness) {
-			super(x,y,size,speed);
-			this.drunkenness = drunkenness;
+			
+			
 		}
 	}
 
