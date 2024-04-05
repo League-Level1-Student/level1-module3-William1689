@@ -1,10 +1,14 @@
 package _06_frogger;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
+
+import javax.swing.Timer;
 
 import processing.core.PApplet;
 
-public class Frogger extends PApplet {
+public class Frogger extends PApplet implements ActionListener{
 	static final int WIDTH = 800;
 	static final int HEIGHT = 600;
 	int dashes = 3;
@@ -18,9 +22,9 @@ public class Frogger extends PApplet {
 	Car car3;
 	Car car4;
 	Car car5;
-//	Car car6;
-//	Car car7;
-//	Car car8;
+	Car car6;
+	Car car7;
+	Car car8;
 	Police police1;
 	Police police2;
 	Drunk drunk1;
@@ -28,7 +32,8 @@ public class Frogger extends PApplet {
 	boolean movingDown = false;
 	boolean movingRight = false;
 	boolean movingLeft = false;
-
+	boolean faze = false;
+Timer timer;
 
 	Random ran = new Random();
 
@@ -44,6 +49,9 @@ public class Frogger extends PApplet {
 
 	public void keyPressed() {
 
+		
+		print(keyCode);
+		
 		if(keyCode == UP&& y>15)
 		{
 			//Frog Y position goes up
@@ -68,8 +76,19 @@ public class Frogger extends PApplet {
 			//x+= -20;
 			movingLeft = true;
 		} 
-
-
+		else if(keyCode == 87) {
+			y-=60;
+		}
+			else if(keyCode == 65) {
+			x-=60;
+			}
+			else if(keyCode == 83) {
+				y+=60;
+			}
+			else if(keyCode == 68) {
+				if(timer.isRunning=false) 
+				{x+=60;
+			}
 
 	}
 	public void keyReleased() {
@@ -99,22 +118,31 @@ public class Frogger extends PApplet {
 			//x+= -20;
 			movingLeft = false;
 		}
-
+		else if(keyCode == 32) {
+			faze = false;
+		}
 
 	}
 	@Override
 	public void setup() {
+		timer = new Timer(1000, this);
+		
+		timer.setRepeats(false);
+		
 		car1 = new Car(400,300, 80,6);
 		car2 = new Car(400, 190, 80, 7);
 		car3 = new Car(400, 90,80, 9);
 		car4 = new Car(400, 410, 80, 6);
 		car5 = new Car(400,30, 80, 11);
-//		car6 = new Car(400,300,80,15);
-//		car7 = new Car(400,400, 80, 8);
-//		car8 = new Car(400,400,80 ,18);
-		police1 = new Police(ran.nextInt(800-80),-100,80,9);
-		police2 = new Police(ran.nextInt(800-80),-100,80,13);
-		drunk1 = new Drunk(ran.nextInt(800-60),ran.nextInt(600-50),50,9,9,5);
+		car6 = new Car(400,300,80,15);
+		car7 = new Car(400,400, 80, 8);
+		car8 = new Car(400,400,80 ,18);
+	
+			police1 = new Police(ran.nextInt(800-80),-100,80,9);
+			police2 = new Police(ran.nextInt(800-80),-100,80,13);
+		
+		
+			drunk1 = new Drunk(ran.nextInt(800-60),ran.nextInt(600-50),50,9,9,5);
 
 
 
@@ -147,26 +175,23 @@ public class Frogger extends PApplet {
 		car4.moveRight();
 		car5.display();
 		car5.moveLeft();
-//		car6.display();
-//		car6.moveRight();
-//		car7.display();
-//		car7.moveLeft();
-//		car8.display();
-//		car8.moveRight();
-		drunk1.display();
-		drunk1.move();
+		car6.display();
+		car6.moveRight();
+		car7.display();
+		car7.moveLeft();
+		car8.display();
+		car8.moveRight();
+		if(level>=7)	{
+			drunk1.display();
+			drunk1.move();
+		}
 		if(level>=5) {
 			police1.display();
 			police1.move();
-		police2.display();
-		police2.move();
-			}
-		else {
-			police1.x = -600;
-			police2.x =-600;
-			police1.y = -800;
-			police2.y = -800;
+			police2.display();
+			police2.move();
 		}
+
 
 		if(movingUp) {
 			y-=5;
@@ -182,19 +207,20 @@ public class Frogger extends PApplet {
 		}
 
 
-		if(intersects(drunk1)) {
+		if(level>=7&&intersects(drunk1)) {
 			y=600;
 			x=400;
 			deaths++;
 		}
 
-		if(intersects(police1)||intersects(police2)){
+		if(level>=5&&intersects(police1)||intersects(police2)){
 			x=400;
 			y=600;
+			
 			deaths++;
 		}
 		if(intersects(car1)||intersects(car2)||intersects(car3)||
-				intersects(car4)||intersects(car5)/**||intersects(car6)||intersects(car7)||intersects(car8)**/){
+				intersects(car4)||intersects(car5)||intersects(car6)||intersects(car7)||intersects(car8)){
 			x=400;
 			y=600;
 			deaths++;
@@ -213,6 +239,7 @@ public class Frogger extends PApplet {
 		}
 	}
 	boolean intersects(Police police) {
+
 		if ((y > police.getY() && y < police.getY()+80) &&
 				(x > police.getX() && x < police.getX()+police.getSize())) {
 			return true;
@@ -248,7 +275,7 @@ public class Frogger extends PApplet {
 			this.xspeed = xspeed;
 			this.yspeed = yspeed;
 			this.drunkness = drunkness;
-			}
+		}
 		int getX() {
 			return x;
 		}
@@ -264,35 +291,35 @@ public class Frogger extends PApplet {
 			rect(x , y,  size, 60);
 
 		}         
-	
-	void move() {
-//		if(x>-size) {
-//			x -= speed;
-//			y+=speed;
-//
-//		}
-		x += xspeed;
-		y+=yspeed;
-		if(x<=0 || x>=750) {
-			xspeed = -xspeed;
+
+		void move() {
+			//		if(x>-size) {
+			//			x -= speed;
+			//			y+=speed;
+			//
+			//		}
+			x += xspeed;
+			y+=yspeed;
+			if(x<=0 || x>=750) {
+				xspeed = -xspeed;
+			}
+			if(y<=0 || y>=550) {
+
+				yspeed = -yspeed;
+
+			}
 		}
-		if(y<=0 || y>=550) {
-			
-			yspeed = -yspeed;
-			
-		}
+
+
+
+
+
 	}
 
-	
-	
-	
-	
-	}
-	
-	
-	
-	
-	
+
+
+
+
 	class Police {
 		int x;
 		int y;
@@ -335,63 +362,71 @@ public class Frogger extends PApplet {
 
 
 
-class Car {
-	int x ;
-	int y;
-	int size;
-	int speed;
+	class Car {
+		int x ;
+		int y;
+		int size;
+		int speed;
 
 
-	public Car(int x, int y, int size, int speed) {
-		this.x = x;
-		this.y = y;
-		this.size = size;
-		this.speed = speed;
-	}
+		public Car(int x, int y, int size, int speed) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.speed = speed;
+		}
 
-	int getX() {
-		return x;
-	}
-	int getY() {
-		return y;
-	}
-	int getSize() {
-		return size;
-	}
+		int getX() {
+			return x;
+		}
+		int getY() {
+			return y;
+		}
+		int getSize() {
+			return size;
+		}
 
-	void display()
-	{
-		fill(255,0,0);
-		rect(x , y,  size, 50);
-	}
-	void moveLeft()
-	{
+		void display()
 		{
-			if(x>-size) {
-				x -= speed;
+			fill(255,0,0);
+			rect(x , y,  size, 50);
+		}
+		void moveLeft()
+		{
+			{
+				if(x>-size) {
+					x -= speed;
 
+				}
+				else {
+					x=800;
+					y = ran.nextInt(450)+60; 
+				}
+			}
+		}
+
+
+
+		void moveRight() {
+			if(x<800) {
+				x+= speed;   				
 			}
 			else {
-				x=800;
+				x=-size;
 				y = ran.nextInt(450)+60; 
 			}
 		}
+
+
 	}
 
 
 
-	void moveRight() {
-		if(x<800) {
-			x+= speed;   				
-		}
-		else {
-			x=-size;
-			y = ran.nextInt(450)+60; 
-		}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
-
-
-}
 
 
 
