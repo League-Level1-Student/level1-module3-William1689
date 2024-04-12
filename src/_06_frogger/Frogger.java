@@ -25,6 +25,7 @@ public class Frogger extends PApplet implements ActionListener{
 	Car car6;
 	Car car7;
 	Car car8;
+	Car car9;
 	Police police1;
 	Police police2;
 	Drunk drunk1;
@@ -32,8 +33,8 @@ public class Frogger extends PApplet implements ActionListener{
 	boolean movingDown = false;
 	boolean movingRight = false;
 	boolean movingLeft = false;
-	boolean faze = false;
-Timer timer;
+	boolean invinc = false;
+	Timer timer;
 
 	Random ran = new Random();
 
@@ -49,9 +50,9 @@ Timer timer;
 
 	public void keyPressed() {
 
-		
-		print(keyCode);
-		
+
+
+
 		if(keyCode == UP&& y>15)
 		{
 			//Frog Y position goes up
@@ -79,16 +80,19 @@ Timer timer;
 		else if(keyCode == 87) {
 			y-=60;
 		}
-			else if(keyCode == 65) {
+		else if(keyCode == 65) {
 			x-=60;
-			}
-			else if(keyCode == 83) {
-				y+=60;
-			}
-			else if(keyCode == 68) {
-				if(timer.isRunning=false) 
-				{x+=60;
-			}
+		}
+		else if(keyCode == 83) {
+			y+=60;
+		}
+		else if(keyCode == 68) {
+			x+=60;
+		}
+		//else if(keyCode == 68) {
+		//if(timer.isRunning=false) 
+		//{x+=60;
+		//}
 
 	}
 	public void keyReleased() {
@@ -113,23 +117,24 @@ Timer timer;
 			movingRight = false;
 		}
 		else if(keyCode == LEFT)
+
+
 		{
 			//Frog X position goes left
 			//x+= -20;
 			movingLeft = false;
 		}
-		else if(keyCode == 32) {
-			faze = false;
-		}
+
 
 	}
 	@Override
 	public void setup() {
 		timer = new Timer(1000, this);
-		
+
 		timer.setRepeats(false);
-		
+
 		car1 = new Car(400,300, 80,6);
+
 		car2 = new Car(400, 190, 80, 7);
 		car3 = new Car(400, 90,80, 9);
 		car4 = new Car(400, 410, 80, 6);
@@ -137,12 +142,12 @@ Timer timer;
 		car6 = new Car(400,300,80,15);
 		car7 = new Car(400,400, 80, 8);
 		car8 = new Car(400,400,80 ,18);
-	
-			police1 = new Police(ran.nextInt(800-80),-100,80,9);
-			police2 = new Police(ran.nextInt(800-80),-100,80,13);
-		
-		
-			drunk1 = new Drunk(ran.nextInt(800-60),ran.nextInt(600-50),50,9,9,5);
+		car9= new Car(400,400,80,3);
+		police1 = new Police(ran.nextInt(800-80),-100,80,9);
+		police2 = new Police(ran.nextInt(800-80),-100,80,13);
+
+
+		drunk1 = new Drunk(ran.nextInt(800-60),ran.nextInt(600-50),50,9,9,5);
 
 
 
@@ -152,35 +157,71 @@ Timer timer;
 
 	@Override
 	public void draw() {
-		background(0,0,0);
+		if(level>1) {
+			background(0,0,0);
+		}
+		else {
+			background(0,0,0);
+			fill(255,255,255);
+			textSize(24);
+			text("Welcome fellow victim, you will need to cross the road\nto get to the other side. Use"
+					+ " arrow keys to move and WASD\nto dash in all directions. Be warned, the dashes have\ncooldowns. "
+					+ "This is the best level to test your movment, "
+					+ "you\nwon't be given any other levels like this later",100,300);
+		}
+
+
 		if(y <= 30 ) {
 			level++;
 			x= 400;
 			y= 600;
 			dashes++;
 		}
+		textSize(12);
 		fill(255,255,255);
 		text("Deaths: "+ deaths,0,30);
 		text("Level: "+level,0, 20);
 
 		fill(0,255,0);
 		ellipse(x,y,30,30);
+		if(level>=2) {
 		car1.display();
-		car1.moveLeft();
+		car1.moveLeft();}
+		
+		if(level>=3) {
 		car2.display();
 		car2.moveRight();
-		car3.display();
-		car3.moveLeft();
-		car4.display();
-		car4.moveRight();
+		
+		
+		
+		if(level>=4) {
+			car3.display();
+			car3.moveLeft();
+			car4.display();
+			car4.moveRight();
+		}
+		
+		}
+		if(level>=6) {
+	
+		
+		
 		car5.display();
 		car5.moveLeft();
-		car6.display();
-		car6.moveRight();
+		
+		
+		
+		
+		
 		car7.display();
 		car7.moveLeft();
+		
+		
 		car8.display();
 		car8.moveRight();
+		}
+		
+		
 		if(level>=7)	{
 			drunk1.display();
 			drunk1.move();
@@ -190,6 +231,10 @@ Timer timer;
 			police1.move();
 			police2.display();
 			police2.move();
+			car9.display();
+			car9.moveLeft();
+			car6.display();
+			car6.moveRight();
 		}
 
 
@@ -213,14 +258,28 @@ Timer timer;
 			deaths++;
 		}
 
-		if(level>=5&&intersects(police1)||intersects(police2)){
+		if(level>=5&&(intersects(police1)||intersects(police2)||intersects(car9)||intersects(car6))){
 			x=400;
 			y=600;
-			
+
 			deaths++;
 		}
-		if(intersects(car1)||intersects(car2)||intersects(car3)||
-				intersects(car4)||intersects(car5)||intersects(car6)||intersects(car7)||intersects(car8)){
+		if(intersects(car1) && level>=2){
+			x=400;
+			y=600;
+			deaths++;
+		}
+		if(intersects(car2)&& level>=3){
+			x=400;
+			y=600;
+			deaths++;
+		}		
+		if((intersects(car4)||intersects(car3))&& level>=4) {
+			x=400;
+			y=600;
+			deaths++;
+		}
+		if((intersects(car5)||intersects(car7)||intersects(car8))&&level>=6 ){
 			x=400;
 			y=600;
 			deaths++;
@@ -425,7 +484,7 @@ Timer timer;
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
