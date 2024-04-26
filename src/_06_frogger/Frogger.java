@@ -107,7 +107,7 @@ public class Frogger extends PApplet implements ActionListener {
 	@Override
 	public void setup() {
 		timer = new Timer(1000, this);
-
+		
 		timer.setRepeats(false);
 
 		car1 = new Car(400, 300, 80, 6);
@@ -130,6 +130,9 @@ public class Frogger extends PApplet implements ActionListener {
 
 	@Override
 	public void draw() {
+		if(deaths>= 150) {
+			System.exit(0);
+		}
 		if (level > 1) {
 			background(0, 0, 0);
 		} else {
@@ -139,7 +142,7 @@ public class Frogger extends PApplet implements ActionListener {
 			text("Welcome fellow victim, you will need to cross the road\nto get to the other side. Use"
 					+ " arrow keys to move and WASD\nto dash in all directions. Be warned, the dashes have\ncooldowns. "
 					+ "This is the best level to test your movment, "
-					+ "you\nwon't be given any other levels like this later", 100, 300);
+					+ "you\nwon't be given any other levels like this later. \nIf you have 150 deahts u DIE", 100, 300);
 		}
 
 		if (y <= 30) {
@@ -198,9 +201,10 @@ public class Frogger extends PApplet implements ActionListener {
 			car6.display();
 			car6.moveRight();
 		}
-
+ if(level >= 10) {
 		train1.display();
 		train1.move();
+		}
 		if (movingUp) {
 			y -= 5;
 		}
@@ -247,9 +251,20 @@ public class Frogger extends PApplet implements ActionListener {
 			deaths++;
 
 		}
-
+		if(intersects(train1)&& level >=10){
+			x = 400;
+			x= 600;
+			deaths++;
+		}
 	}
+	boolean intersects(Train train) {
+		if ((y > train.getY() && y < train.getY() + 50) && (x > train.getX() && x < train.getX() + train.getSize())) {
+			return true;
+		} else {
+			return false;
 
+		}
+	}
 	boolean intersects(Drunk drunk) {
 		if ((y > drunk.getY() && y < drunk.getY() + 50) && (x > drunk.getX() && x < drunk.getX() + drunk.getSize())) {
 			return true;
@@ -312,21 +327,31 @@ public class Frogger extends PApplet implements ActionListener {
 			rect(x, y, size, 60);
 
 		}
-
+		int getSize() {
+			return size;
+		}
 		void move() {
 
 			if (x < 800) {
 				x += speed;
 			}
-			if (x > 800) {
+			// if (x > 800) {
+			//
+			// x -= 800;
+			// speed -=
+			// y = (int) random(0,500);
+			//
+			// }
+			 if (x >= 800 && !notSpedUpYet) {
+			 x = -size;
+			 speed = 4;
+			 notSpedUpYet = true;
+			 y = (int) random(0,500);
+			 }
 
-				x -= 800;
-				speed -= 
-				y = (int) random(0,500);
-
-			}
-			if (x > 740 && notSpedUpYet) {
-				speed += 27;
+			if (x >= 800 && notSpedUpYet) {
+				x = -size;
+				speed += 20;
 				notSpedUpYet = false;
 
 			}
