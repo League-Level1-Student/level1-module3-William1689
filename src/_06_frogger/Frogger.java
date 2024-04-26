@@ -107,7 +107,7 @@ public class Frogger extends PApplet implements ActionListener {
 	@Override
 	public void setup() {
 		timer = new Timer(1000, this);
-		
+
 		timer.setRepeats(false);
 
 		car1 = new Car(400, 300, 80, 6);
@@ -201,9 +201,9 @@ public class Frogger extends PApplet implements ActionListener {
 			car6.display();
 			car6.moveRight();
 		}
- if(level >= 10) {
-		train1.display();
-		train1.move();
+		if(level >= 10) {
+			train1.display();
+			train1.move();
 		}
 		if (movingUp) {
 			y -= 5;
@@ -342,12 +342,12 @@ public class Frogger extends PApplet implements ActionListener {
 			// y = (int) random(0,500);
 			//
 			// }
-			 if (x >= 800 && !notSpedUpYet) {
-			 x = -size;
-			 speed = 4;
-			 notSpedUpYet = true;
-			 y = (int) random(0,500);
-			 }
+			if (x >= 800 && !notSpedUpYet) {
+				x = -size;
+				speed = 4;
+				notSpedUpYet = true;
+				y = (int) random(0,500);
+			}
 
 			if (x >= 800 && notSpedUpYet) {
 				x = -size;
