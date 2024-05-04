@@ -455,6 +455,32 @@ public class Frogger extends PApplet implements ActionListener {
 		}
 
 	}
+class Boss {
+	int x;
+	int y;
+	int size;
+	int speed;
+	
+	public Boss(int x, int y, int size, int speed) {
+		this.x=x;
+		this.y = y;
+		this.size = size;
+		this.speed = speed;
+	}
+ int getX() {
+	 return x;
+ }
+int getY () {
+	return y;
+}
+
+
+wdw
+
+
+
+
+}
 
 	class Car {
 		int x;
