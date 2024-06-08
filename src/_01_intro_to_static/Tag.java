@@ -1,7 +1,7 @@
 package _01_intro_to_static;
 //import _01_methods._5_Blob_Battles.Blob_Battles;
 import processing.core.PApplet;
-public class Blob_Battles extends PApplet{
+public class Tag extends PApplet{
 	static final int WIDTH = 1920;
 	static final int HEIGHT = 950;
 	int x = 500;
@@ -124,8 +124,9 @@ public class Blob_Battles extends PApplet{
 
 
 	static public void main(String[] args) {
-		PApplet.main(Blob_Battles.class.getName());
+		PApplet.main(Tag.class.getName());
 	}
 
 
 }
+
